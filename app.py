@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+load_dotenv()
 import gradio as gr
 import nest_asyncio
 import asyncio
@@ -15,8 +17,8 @@ from lightrag.llm.openai import openai_embed
 nest_asyncio.apply()
 setup_logger("lighrag", level="INFO")
 
-WORKING_DIR = "./rag_storage"  # Local folder on EC2 or wherever deployed
-client = AsyncOpenAI()
+WORKING_DIR = os.environ.get("WORKING_DIR", "./rag_storage")
+client = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 manual_token_usage = {"call_count": 0, "prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
 
 def count_tokens(text, model="gpt-4o"):
